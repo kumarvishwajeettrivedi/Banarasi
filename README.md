@@ -1,5 +1,5 @@
 # 🥛 Banarasi
-![Banarasi Website Preview](banarasi.png)
+![Banarasi Website Preview](Banarasi.png)
 **Banarasi** is a modern digital concept for a **premium Thandai brand** — inspired by the rich heritage and authentic flavors of Banaras.  
 This project is a **React-based website concept**, crafted to reflect tradition, purity, and a modern brand experience.  
 The full-scale **Banarasi App** is scheduled to go live next year.
