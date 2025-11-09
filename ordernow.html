@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Order Banarasi Thandai</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;600&display=swap">
+  <style>
+    :root {
+      /* Color Palette */
+      --gold-primary: #C89B3C;
+      --gold-light: #EFA94A;
+      --gold-dark: #8B4513;
+      --cream: #FFF7E8;
+      --deep-brown: #2C1810;
+      --success-green: #4BB543;
+      
+      /* Typography */
+      --font-display: 'Playfair Display', serif;
+      --font-body: 'Poppins', sans-serif;
+      
+      /* Spacing */
+      --space-xs: 8px;
+      --space-sm: 16px;
+      --space-md: 24px;
+      --space-lg: 50px;
+      --space-xl: 64px;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-body);
+      color: var(--deep-brown);
+      background-color: var(--cream);
+      overflow-x: hidden;
+    }
+
+    .order-container {
+      max-width: 1200px;
+      margin: 100px auto;
+      padding: var(--space-md);
+      position: relative;
+      z-index: 10;
+    }
+
+    .order-header {
+      text-align: center;
+      margin-bottom: var(--space-xl);
+    }
+
+    .order-title {
+      font-family: var(--font-display);
+      font-size: 3rem;
+      color: var(--gold-primary);
+      margin-bottom: var(--space-sm);
+    }
+
+    .order-subtitle {
+      font-size: 1.2rem;
+      color: var(--deep-brown);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: var(--space-lg);
+      margin-bottom: var(--space-xl);
+    }
+
+    .package-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(44, 24, 16, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      position: relative;
+    }
+
+    .package-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(44, 24, 16, 0.15);
+    }
+
+    .package-image {
+      height: 200px;
+      background: linear-gradient(135deg, var(--gold-light), var(--gold-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .package-image img {
+      max-height: 180px;
+      transition: transform 0.5s ease;
+    }
+
+    .package-card:hover .package-image img {
+      transform: scale(1.05);
+    }
+
+    .package-badge {
+      position: absolute;
+      top: var(--space-sm);
+      right: var(--space-sm);
+      background: var(--gold-primary);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .package-content {
+      padding: var(--space-md);
+    }
+
+    .package-name {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--gold-dark);
+      margin-bottom: var(--space-xs);
+    }
+
+    .package-description {
+      color: var(--deep-brown);
+      margin-bottom: var(--space-md);
+      line-height: 1.6;
+    }
+
+    .package-price {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--gold-primary);
+      margin-bottom: var(--space-md);
+    }
+
+    .package-price span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--deep-brown);
+    }
+
+    .quantity-controls {
+      display: flex;
+      align-items: center;
+      margin-bottom: var(--space-md);
+    }
+
+    .quantity-btn {
+      width: 40px;
+      height: 40px;
+      background: var(--gold-primary);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .quantity-btn:hover {
+      background: var(--gold-light);
+    }
+
+    .quantity-display {
+      margin: 0 var(--space-sm);
+      font-size: 1.2rem;
+      min-width: 30px;
+      text-align: center;
+    }
+
+    .add-to-cart {
+      width: 100%;
+      background: var(--gold-primary);
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .add-to-cart:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+    }
+
+    .add-to-cart.added {
+      background: var(--success-green);
+    }
+
+    .cart-summary {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      padding: var(--space-sm) var(--space-md);
+      box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.1);
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cart-summary.active {
+      transform: translateY(0);
+    }
+
+    .cart-info {
+      display: flex;
+      align-items: center;
+    }
+
+    .cart-icon {
+      position: relative;
+      margin-right: var(--space-sm);
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background: var(--gold-primary);
+      color: white;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+    }
+
+    .cart-total {
+      font-weight: 600;
+    }
+
+    .checkout-btn {
+      background: var(--gold-primary);
+      color: white;
+      border: none;
+      padding: 10px 24px;
+      border-radius: 30px;
+      font-family: var(--font-body);
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .checkout-btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+    }
+
+    .checkout-btn:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Banarasi background pattern */
+    .banarasi-pattern {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><path fill="%23C89B3C" fill-opacity="0.05" d="M50 0c27.6 0 50 22.4 50 50s-22.4 50-50 50S0 77.6 0 50 22.4 0 50 0zm0 10c-22.1 0-40 17.9-40 40s17.9 40 40 40 40-17.9 40-40-17.9-40-40-40zm0 10c16.6 0 30 13.4 30 30S66.6 80 50 80 20 66.6 20 50s13.4-30 30-30zm0 10c-11 0-20 9-20 20s9 20 20 20 20-9 20-20-9-20-20-20z"/></svg>');
+      background-size: 300px;
+      z-index: -1;
+      opacity: 0.3;
+    }
+
+    /* Success notification */
+    .notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: var(--success-green);
+      color: white;
+      padding: var(--space-sm) var(--space-md);
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      transform: translateX(200%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+    }
+
+    .notification.show {
+      transform: translateX(0);
+    }
+
+    @media (max-width: 768px) {
+      .order-container {
+        margin: 80px auto;
+      }
+      
+      .packages-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .cart-summary {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .checkout-btn {
+        margin-top: var(--space-sm);
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="banarasi-pattern"></div>
+  
+  <div class="order-container">
+    <div class="order-header">
+      <h1 class="order-title">Choose Your Thandai Package</h1>
+      <p class="order-subtitle">Experience the authentic taste of Banaras with our premium thandai blends. Select your favorite package below.</p>
+    </div>
+    
+    <div class="packages-grid">
+      <!-- Package 1 -->
+      <div class="package-card">
+        <div class="package-image">
+          <img src="https://via.placeholder.com/200x180.png?text=Thandai+Pack" alt="Thandai Pack of 3">
+          <div class="package-badge">Most Popular</div>
+        </div>
+        <div class="package-content">
+          <h3 class="package-name">Starter Pack</h3>
+          <p class="package-description">Perfect for trying our authentic Banarasi Thandai. Includes 3 premium bottles.</p>
+          <div class="package-price">₹250 <span>(₹83 per bottle)</span></div>
+          
+          <div class="quantity-controls">
+            <button class="quantity-btn minus" data-package="pack3">-</button>
+            <div class="quantity-display" id="quantity-pack3">0</div>
+            <button class="quantity-btn plus" data-package="pack3">+</button>
+          </div>
+          
+          <button class="add-to-cart" data-package="pack3" data-price="250">Add to Cart</button>
+        </div>
+      </div>
+      
+      <!-- Package 2 -->
+      <div class="package-card">
+        <div class="package-image">
+          <img src="https://via.placeholder.com/200x180.png?text=Thandai+Pack" alt="Thandai Pack of 5">
+          <div class="package-badge">Best Value</div>
+        </div>
+        <div class="package-content">
+          <h3 class="package-name">Family Pack</h3>
+          <p class="package-description">Great for sharing with family and friends. Includes 5 premium bottles.</p>
+          <div class="package-price">₹450 <span>(₹90 per bottle)</span></div>
+          
+          <div class="quantity-controls">
+            <button class="quantity-btn minus" data-package="pack5">-</button>
+            <div class="quantity-display" id="quantity-pack5">0</div>
+            <button class="quantity-btn plus" data-package="pack5">+</button>
+          </div>
+          
+          <button class="add-to-cart" data-package="pack5" data-price="450">Add to Cart</button>
+        </div>
+      </div>
+      
+      <!-- Package 3 -->
+      <div class="package-card">
+        <div class="package-image">
+          <img src="https://via.placeholder.com/200x180.png?text=Thandai+Pack" alt="Thandai Pack of 12">
+        </div>
+        <div class="package-content">
+          <h3 class="package-name">Bulk Pack</h3>
+          <p class="package-description">For thandai lovers and special occasions. Includes 12 premium bottles.</p>
+          <div class="package-price">₹850 <span>(₹71 per bottle)</span></div>
+          
+          <div class="quantity-controls">
+            <button class="quantity-btn minus" data-package="pack12">-</button>
+            <div class="quantity-display" id="quantity-pack12">0</div>
+            <button class="quantity-btn plus" data-package="pack12">+</button>
+          </div>
+          
+          <button class="add-to-cart" data-package="pack12" data-price="850">Add to Cart</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="cart-summary">
+    <div class="cart-info">
+      <div class="cart-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 2L3 6V20C3 20.5304 3.21071 21.0391 3.58579 21.4142C3.96086 21.7893 4.46957 22 5 22H19C19.5304 22 20.0391 21.7893 20.4142 21.4142C20.7893 21.0391 21 20.5304 21 20V6L18 2H6Z" stroke="var(--gold-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M3 6H21" stroke="var(--gold-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 10C16 11.0609 15.5786 12.0783 14.8284 12.8284C14.0783 13.5786 13.0609 14 12 14C10.9391 14 9.92172 13.5786 9.17157 12.8284C8.42143 12.0783 8 11.0609 8 10" stroke="var(--gold-dark)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="cart-count" id="cart-count">0</div>
+      </div>
+      <div class="cart-total">Total: ₹<span id="cart-total">0</span></div>
+    </div>
+    <button class="checkout-btn" id="checkout-btn" disabled>Proceed to Checkout</button>
+  </div>
+  
+  <div class="notification" id="notification">
+    Item added to cart!
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize cart from localStorage
+      let cart = JSON.parse(localStorage.getItem('thandaiCart')) || {
+        pack3: { quantity: 0, price: 250 },
+        pack5: { quantity: 0, price: 450 },
+        pack12: { quantity: 0, price: 850 }
+      };
+      
+      // DOM elements
+      const quantityDisplays = {
+        pack3: document.getElementById('quantity-pack3'),
+        pack5: document.getElementById('quantity-pack5'),
+        pack12: document.getElementById('quantity-pack12')
+      };
+      
+      const cartCountEl = document.getElementById('cart-count');
+      const cartTotalEl = document.getElementById('cart-total');
+      const checkoutBtn = document.getElementById('checkout-btn');
+      const notification = document.getElementById('notification');
+      const cartSummary = document.querySelector('.cart-summary');
+      
+      // Update UI from cart data
+      function updateCartUI() {
+        let totalItems = 0;
+        let totalPrice = 0;
+        
+        for (const [packageId, item] of Object.entries(cart)) {
+          quantityDisplays[packageId].textContent = item.quantity;
+          totalItems += item.quantity;
+          totalPrice += item.quantity * item.price;
+        }
+        
+        cartCountEl.textContent = totalItems;
+        cartTotalEl.textContent = totalPrice;
+        
+        // Show/hide cart summary
+        if (totalItems > 0) {
+          cartSummary.classList.add('active');
+          checkoutBtn.disabled = false;
+        } else {
+          cartSummary.classList.remove('active');
+          checkoutBtn.disabled = true;
+        }
+      }
+      
+      // Quantity button handlers
+      document.querySelectorAll('.quantity-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const packageId = this.dataset.package;
+          const isPlus = this.classList.contains('plus');
+          
+          if (isPlus) {
+            cart[packageId].quantity++;
+          } else {
+            if (cart[packageId].quantity > 0) {
+              cart[packageId].quantity--;
+            }
+          }
+          
+          localStorage.setItem('thandaiCart', JSON.stringify(cart));
+          updateCartUI();
+        });
+      });
+      
+      // Add to cart button handlers
+      document.querySelectorAll('.add-to-cart').forEach(btn => {
+        btn.addEventListener('click', function() {
+          const packageId = this.dataset.package;
+          
+          if (cart[packageId].quantity > 0) {
+            // Show notification
+            notification.classList.add('show');
+            setTimeout(() => {
+              notification.classList.remove('show');
+            }, 3000);
+            
+            // Visual feedback
+            this.classList.add('added');
+            setTimeout(() => {
+              this.classList.remove('added');
+            }, 1000);
+          }
+        });
+      });
+      
+      // Checkout button handler
+      checkoutBtn.addEventListener('click', function() {
+        alert('Proceeding to checkout! In a real app, this would redirect to payment.');
+        // Here you would typically redirect to a checkout page
+      });
+      
+      // Initialize UI
+      updateCartUI();
+    });
+  </script>
+</body>
+</html>
